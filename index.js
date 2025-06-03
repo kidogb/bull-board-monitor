@@ -3,6 +3,9 @@ const Queue = require('bull');
 const { createBullBoard } = require('@bull-board/api');
 const { BullAdapter } = require('@bull-board/api/bullAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 // Create Express app
 const app = express();
@@ -12,8 +15,10 @@ const PORT = process.env.PORT || 3030;
 const redisConfig = {
   host: process.env.REDIS_HOST || 'localhost',
   port: process.env.REDIS_PORT || 6379,
-  password: process.env.REDIS_PASSWORD || undefined,
+  password: process.env.REDIS_PASSWORD || '',
 };
+
+console.log(redisConfig);
 
 // Create queue
 const transactionsQueue = new Queue('transactions', redisConfig);
