@@ -13,13 +13,12 @@ const PORT = process.env.PORT || 3030;
 
 // Redis configuration
 const redisConfig = {
-  host: process.env.REDIS_HOST || 'localhost',
-  port: process.env.REDIS_PORT || 6379,
-  password: process.env.REDIS_PASSWORD || '',
+  redis: {
+    host: process.env.REDIS_HOST || 'localhost',
+    port: process.env.REDIS_PORT || 6379,
+    password: process.env.REDIS_PASSWORD || undefined,
+  }
 };
-
-console.log(redisConfig);
-
 // Create queue
 const transactionsQueue = new Queue('transactions', redisConfig);
 
