@@ -1,0 +1,9 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: bull-board-monitor
+    ports:
+      - "3030:3030"
+    restart: unless-stopped
