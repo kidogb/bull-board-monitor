@@ -3,6 +3,7 @@ const Queue = require('bull');
 const { createBullBoard } = require('@bull-board/api');
 const { BullAdapter } = require('@bull-board/api/bullAdapter');
 const { ExpressAdapter } = require('@bull-board/express');
+const basicAuth = require('basic-auth');
 
 // Create Express app
 const app = express();
@@ -34,8 +35,20 @@ createBullBoard({
   },
 });
 
-// Mount Bull Board
-app.use('/admin/queues', serverAdapter.getRouter());
+// Basic Auth middleware for /admin/queues
+const adminUser = process.env.ADMIN_USER || 'admin';
+const adminPass = process.env.ADMIN_PASS || 'secret';
+function auth(req, res, next) {
+  const user = basicAuth(req);
+  if (!user || user.name !== adminUser || user.pass !== adminPass) {
+    res.set('WWW-Authenticate', 'Basic realm="Admin Area"');
+    return res.status(401).send('Authentication required.');
+  }
+  next();
+}
+
+// Mount Bull Board with auth
+app.use('/admin/queues', auth, serverAdapter.getRouter());
 
 // Error handling
 app.use((err, req, res, next) => {
