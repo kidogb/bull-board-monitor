@@ -28,7 +28,7 @@ serverAdapter.setBasePath('/admin/queues');
 
 createBullBoard({
   queues: [
-    new BullAdapter(transactionsQueue, { readOnlyMode: true }),
+    new BullAdapter(transactionsQueue, { readOnlyMode: false }),
   ],
   serverAdapter,
   options: {
